@@ -35,5 +35,10 @@ public @interface GenQueryVO {
      */
     AppendField[] append() default {};
 
+    /**
+     * 新类名后缀
+     */
+    String suffix() default "QueryVO";
+
 
 }

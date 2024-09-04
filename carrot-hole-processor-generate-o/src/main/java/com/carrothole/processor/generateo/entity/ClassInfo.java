@@ -1,5 +1,7 @@
 package com.carrothole.processor.generateo.entity;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -17,23 +19,41 @@ public class ClassInfo {
     private String name;
 
     /**
+     * 类描述
+     */
+    private String description;
+
+    /**
      * 包名称
      */
     private String packageName;
 
-    /**
-     * 要导入的包
-     */
-    private Set<String> imports;
 
     /**
      * 写出类位置
      */
     private String writePath;
 
-    private Set<FieldInfo> fields;
+    /**
+     * 要导入的包
+     */
+    private final Set<String> imports;
+
+
+    private final Set<FieldInfo> fields;
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public ClassInfo() {
+        fields = new HashSet<>();
+        imports = new HashSet<>();
     }
 
     public String getName() {
@@ -56,10 +76,6 @@ public class ClassInfo {
         return imports;
     }
 
-    public void setImports(Set<String> imports) {
-        this.imports = imports;
-    }
-
     public String getWritePath() {
         return writePath;
     }
@@ -72,17 +88,28 @@ public class ClassInfo {
         return fields;
     }
 
-    public void setFields(Set<FieldInfo> fields) {
-        this.fields = fields;
+    public void addFields(FieldInfo... fields) {
+
+        for (FieldInfo field : fields) {
+            this.fields.add(field);
+            if (!field.getType().startsWith("java.lang")){
+                imports.add(field.getType());
+            }
+        }
+    }
+
+    public void addImport(String... imports) {
+        this.imports.addAll(Arrays.asList(imports));
     }
 
     @Override
     public String toString() {
         return "ClassInfo{" +
                 "name='" + name + '\'' +
+                ", description='" + description + '\'' +
                 ", packageName='" + packageName + '\'' +
+                ", writePath='" + writePath + '\'' +
                 ", imports=" + imports +
-                ", exportName='" + writePath + '\'' +
                 ", fields=" + fields +
                 '}';
     }

@@ -13,6 +13,8 @@ public class FieldInfo {
 
     private String type;
 
+    private String simpleType;
+
     private String describe;
 
 
@@ -39,6 +41,12 @@ public class FieldInfo {
 
     public void setType(String type) {
         this.type = type;
+        String[] split = type.split("\\.");
+        this.simpleType = split[split.length-1];
+    }
+
+    public String getSimpleType() {
+        return simpleType;
     }
 
     public String getDescribe() {
@@ -51,9 +59,10 @@ public class FieldInfo {
 
     @Override
     public String toString() {
-        return "ClassFieldInfo{" +
+        return "FieldInfo{" +
                 "name='" + name + '\'' +
                 ", type='" + type + '\'' +
+                ", simpleType='" + simpleType + '\'' +
                 ", describe='" + describe + '\'' +
                 '}';
     }
