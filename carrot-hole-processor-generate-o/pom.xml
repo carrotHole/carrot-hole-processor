@@ -6,16 +6,21 @@
     <parent>
         <groupId>io.github.carrothole</groupId>
         <artifactId>carrot-hole-processor</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.1</version>
     </parent>
+
     <packaging>jar</packaging>
     <artifactId>carrot-hole-processor-generate-o</artifactId>
+    <description>自动生成entity的vo类</description>
+    <url>https://github.com/carrotHole/carrot-hole-processor.git</url>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+
 
     <build>
         <resources>
