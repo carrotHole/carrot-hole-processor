@@ -1,4 +1,4 @@
-package com.carrothole.processor.generateo.entity;
+package io.github.carrothole.processor.generateo.entity;
 
 import java.util.Arrays;
 import java.util.HashSet;

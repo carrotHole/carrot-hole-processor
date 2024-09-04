@@ -1,34 +1,20 @@
-package com.carrothole.processor.generateo;
+package io.github.carrothole.processor.generateo;
 
-import com.carrothole.processor.generateo.anno.AppendField;
-import com.carrothole.processor.generateo.anno.GenQueryVO;
-import com.carrothole.processor.generateo.anno.GenQueryVOField;
-import com.carrothole.processor.generateo.entity.ClassInfo;
-import com.carrothole.processor.generateo.entity.FieldInfo;
-import com.carrothole.processor.generateo.service.ProcessorService;
+import io.github.carrothole.processor.generateo.anno.GenQueryVO;
+import io.github.carrothole.processor.generateo.entity.ClassInfo;
+import io.github.carrothole.processor.generateo.service.ProcessorService;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
-import javax.tools.Diagnostic;
-import javax.tools.JavaFileObject;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.Filer;
-
-import static java.util.Locale.ENGLISH;
 
 
 /**

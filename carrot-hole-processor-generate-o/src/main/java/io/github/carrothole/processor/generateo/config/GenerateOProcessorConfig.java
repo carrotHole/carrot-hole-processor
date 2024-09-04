@@ -1,4 +1,4 @@
-package com.carrothole.processor.generateo.config;
+package io.github.carrothole.processor.generateo.config;
 
 /**
  * Description:  <br>

@@ -1,9 +1,9 @@
-package com.carrothole.processor.generateo;
+package io.github.carrothole.processor.generateo;
 
-import com.carrothole.processor.generateo.anno.GenQueryVO;
-import com.carrothole.processor.generateo.anno.GenResultVO;
-import com.carrothole.processor.generateo.entity.ClassInfo;
-import com.carrothole.processor.generateo.service.ProcessorService;
+import io.github.carrothole.processor.generateo.anno.GenQueryVO;
+import io.github.carrothole.processor.generateo.anno.GenResultVO;
+import io.github.carrothole.processor.generateo.entity.ClassInfo;
+import io.github.carrothole.processor.generateo.service.ProcessorService;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;

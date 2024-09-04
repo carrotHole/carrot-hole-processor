@@ -1,4 +1,4 @@
-package com.carrothole.processor.generateo.anno;
+package io.github.carrothole.processor.generateo.anno;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

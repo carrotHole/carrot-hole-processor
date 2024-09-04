@@ -1,4 +1,4 @@
-package com.carrothole.processor.generateo.entity;
+package io.github.carrothole.processor.generateo.entity;
 
 /**
  * Description: 类成员变量 <br>

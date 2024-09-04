@@ -1,2 +1,2 @@
-com.carrothole.processor.generateo.GenerateQueryVOProcessor
-com.carrothole.processor.generateo.GenerateResultVOProcessor
+io.github.carrothole.processor.generateo.GenerateQueryVOProcessor
+io.github.carrothole.processor.generateo.GenerateResultVOProcessor
