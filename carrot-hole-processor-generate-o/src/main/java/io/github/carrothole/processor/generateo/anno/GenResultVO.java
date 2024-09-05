@@ -18,7 +18,7 @@ public @interface GenResultVO{
     /**
      * 字段描述
      */
-    String describe() default "";
+    String describe() default "返回对象";
 
 
     /**

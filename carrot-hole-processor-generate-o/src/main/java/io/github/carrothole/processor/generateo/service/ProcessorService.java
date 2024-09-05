@@ -1,20 +1,15 @@
 package io.github.carrothole.processor.generateo.service;
 
 import io.github.carrothole.processor.generateo.anno.AppendField;
-import io.github.carrothole.processor.generateo.anno.GenQueryVOField;
 import io.github.carrothole.processor.generateo.entity.ClassInfo;
 import io.github.carrothole.processor.generateo.entity.FieldInfo;
 
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 import static java.util.Locale.ENGLISH;
 
@@ -28,42 +23,14 @@ import static java.util.Locale.ENGLISH;
 public interface ProcessorService<T> {
 
 
-    default void setField(AppendField[] append, ClassInfo classInfo,  TypeElement typeElement, ProcessingEnvironment processingEnv) {
+    default void setAppendField(AppendField[] append, ClassInfo classInfo, TypeElement typeElement, ProcessingEnvironment processingEnv) {
         for (AppendField appendField : append) {
             if (!appendField.ignore()) {
                 classInfo.addFields(new FieldInfo(appendField.name(), appendField.typeName(), appendField.describe()));
             }
         }
 
-        // 类成员变量
-        List<? extends Element> enclosedElements = typeElement.getEnclosedElements();
-        for (Element field : enclosedElements) {
-            GenQueryVOField annotation = field.getAnnotation(GenQueryVOField.class);
-            // 添加了GenQueryVOField注解的类
-            if (annotation != null && !annotation.ignore() && field.getKind() == ElementKind.FIELD) {
-                // 字段名
-                TypeMirror type = field.asType();
-                // 字段类型
-                Element type_ = processingEnv.getTypeUtils().asElement(type);
-                if (type_ != null) {
-                    type = type_.asType();
-                }
-                // 字段描述
-                String describe = annotation.describe();
 
-                if (annotation.between()) {
-                    // 起始字段
-                    classInfo.addFields(new FieldInfo(field.getSimpleName().toString() + "Begin", type.toString(), describe + "开始"));
-                    classInfo.addFields(new FieldInfo(field.getSimpleName().toString() + "End", type.toString(), describe + "结束"));
-                    if (!annotation.ignoreSelf()) {
-                        classInfo.addFields(new FieldInfo(field.getSimpleName().toString(), type.toString(), describe));
-                    }
-                } else {
-                    classInfo.addFields(new FieldInfo(field.getSimpleName().toString(), type.toString(), describe));
-                }
-
-            }
-        }
     }
 
     default void write(ClassInfo classInfo, ProcessingEnvironment processingEnv) {

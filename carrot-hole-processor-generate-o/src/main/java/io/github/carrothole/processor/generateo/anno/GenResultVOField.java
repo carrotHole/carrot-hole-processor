@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Description: 生成QueryVO的注解 <br>
+ * Description: 生成ResultVO字段的注解 <br>
  * Date: 2024/9/3 9:35 <br>
  *
  * @author moon
@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.SOURCE)
-public @interface GenQueryVO {
+public @interface GenResultVOField {
 
     /**
      * 是否忽略<br/>
@@ -25,18 +25,19 @@ public @interface GenQueryVO {
     /**
      * 字段描述
      */
-    String describe() default "查询对象";
+    String describe() default "";
+
+    /**
+     * 不生成原始字段<br/>
+     * true: 其他部分配置生效,不生成此字段
+     */
+    boolean ignoreSelf() default false;
 
 
     /**
-     * 附加字段<br/>
+     * 是否使用起始值两个字段<br/>
+     * 描述信息使用{@link GenResultVOField#describe()}内容,后坠为'开始'和'结束',如'创建时间开始/创建时间结束'
      */
-    AppendField[] append() default {};
-
-    /**
-     * 新类名后缀
-     */
-    String suffix() default "QueryVO";
-
+    boolean between() default false;
 
 }
