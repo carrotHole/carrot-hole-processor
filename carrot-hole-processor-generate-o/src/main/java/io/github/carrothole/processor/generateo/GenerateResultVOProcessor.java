@@ -56,7 +56,7 @@ public class GenerateResultVOProcessor extends AbstractProcessor implements Proc
             classInfo.setPackageName(elementUtils.getPackageOf(typeElement).getQualifiedName().toString() + ".ro");
             classInfo.setDescription(genResultVO.describe());
             classInfo.setName(newClassName);
-            classInfo.addImport("io.swagger.v3.oas.annotations.media.Schema");
+
 
             // 附加字段
             setAppendField(genResultVO.append(), classInfo, typeElement,processingEnv);

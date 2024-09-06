@@ -23,7 +23,7 @@ public class FieldInfo {
 
     public FieldInfo(String name, String type, String describe) {
         this.name = name;
-        this.type = type;
+        setType(type);
         this.describe = describe;
     }
 

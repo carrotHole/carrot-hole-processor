@@ -40,14 +40,20 @@ public interface ProcessorService<T> {
 
             try (PrintWriter writer = new PrintWriter(fileObject.openWriter())) {
                 writer.println("package " + classInfo.getPackageName() + ";");
+                writer.println("");
+                writer.println("import io.swagger.v3.oas.annotations.media.Schema;");
+                writer.println("import java.io.Serializable;");
+
                 // 导包
                 for (String anImport : classInfo.getImports()) {
                     writer.println("import "+anImport+";");
                 }
 
+                writer.println("");
+
                 // 类名
                 writer.println("@Schema(description = \"" + classInfo.getDescription() + "\")");
-                writer.println("public class " + classInfo.getName() + " implements java.io.Serializable {");
+                writer.println("public class " + classInfo.getName() + " implements Serializable {");
 
                 // 生成构造器
                 writer.println("    public " + classInfo.getName() + "() {}");
@@ -55,14 +61,14 @@ public interface ProcessorService<T> {
                 // 成员变量
                 for (FieldInfo field : classInfo.getFields()) {
                     writer.println("    @Schema(description = \"" + field.getDescribe() + "\")");
-                    writer.println("    private " + field.getType() + " " + field.getName() + ";");
+                    writer.println("    private " + field.getSimpleType() + " " + field.getName() + ";");
                     writer.println(" ");
                 }
 
                 // getter/setter
                 for (FieldInfo field : classInfo.getFields()) {
-                    writer.println("    public " + field.getType() + " get" + capitalize(field.getName()) + "() { return this." + field.getName() + "; }");
-                    writer.println("    public void set" + capitalize(field.getName()) + "(" + field.getType() + " " + field.getName() + ") { this." + field.getName() + " = " + field.getName() + "; }");
+                    writer.println("    public " + field.getSimpleType() + " get" + capitalize(field.getName()) + "() { return this." + field.getName() + "; }");
+                    writer.println("    public void set" + capitalize(field.getName()) + "(" + field.getSimpleType() + " " + field.getName() + ") { this." + field.getName() + " = " + field.getName() + "; }");
                     writer.println(" ");
                 }
 
