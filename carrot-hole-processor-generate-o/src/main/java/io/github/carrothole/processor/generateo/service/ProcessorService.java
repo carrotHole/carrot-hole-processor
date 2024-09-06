@@ -36,7 +36,7 @@ public interface ProcessorService<T> {
     default void write(ClassInfo classInfo, ProcessingEnvironment processingEnv) {
         try {
             // 创建.java文件
-            JavaFileObject fileObject = processingEnv.getFiler().createSourceFile(classInfo.getPackageName());
+            JavaFileObject fileObject = processingEnv.getFiler().createSourceFile(classInfo.getPackageName()+"."+classInfo.getName());
 
             try (PrintWriter writer = new PrintWriter(fileObject.openWriter())) {
                 writer.println("package " + classInfo.getPackageName() + ";");
