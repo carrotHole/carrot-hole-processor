@@ -11,6 +11,8 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
@@ -57,45 +59,66 @@ public class GenerateQueryVOProcessor extends AbstractProcessor implements Proce
             classInfo.setPackageName(elementUtils.getPackageOf(typeElement).getQualifiedName().toString() + ".qo");
             classInfo.setDescription(genQueryVO.describe());
             classInfo.setName(newClassName);
-
-            // 设置字段
-            setAppendField(genQueryVO.append(), classInfo, typeElement,processingEnv);
             // 附加字段
             List<? extends Element> enclosedElements = typeElement.getEnclosedElements();
-            // 类成员变量
-            for (Element field : enclosedElements) {
-                GenQueryVOField annotation = field.getAnnotation(GenQueryVOField.class);
-                // 添加了GenQueryVOField注解的类
-                if (annotation != null && !annotation.ignore() && field.getKind() == ElementKind.FIELD) {
-                    // 字段名
-                    TypeMirror type = field.asType();
-                    // 字段类型
-                    Element type_ = processingEnv.getTypeUtils().asElement(type);
-                    if (type_ != null) {
-                        type = type_.asType();
-                    }
-                    // 字段描述
-                    String describe = annotation.describe();
 
-                    if (annotation.between()) {
-                        // 起始字段
-                        classInfo.addFields(new FieldInfo(field.getSimpleName().toString() + "Begin", type.toString(), describe + "开始"));
-                        classInfo.addFields(new FieldInfo(field.getSimpleName().toString() + "End", type.toString(), describe + "结束"));
-                        if (!annotation.ignoreSelf()) {
-                            classInfo.addFields(new FieldInfo(field.getSimpleName().toString(), type.toString(), describe));
-                        }
-                    } else {
-                        classInfo.addFields(new FieldInfo(field.getSimpleName().toString(), type.toString(), describe));
-                    }
+            // 设置成员变量
+            setAppendField(genQueryVO.append(), classInfo, typeElement,processingEnv);
 
+
+            setClassField(enclosedElements, classInfo);
+
+            // 获取父类成员变量
+            TypeMirror typeMirror = typeElement.asType();
+            // 获取父类的TypeMirror
+            for (TypeMirror superclassTypeMirror : typeUtils.directSupertypes(typeMirror)) {
+                // 检查父类是否是已解析的类
+                if (superclassTypeMirror.getKind() == TypeKind.DECLARED) {
+                    DeclaredType superclassDeclaredType = (DeclaredType) superclassTypeMirror;
+                    TypeElement superclassTypeElement = (TypeElement) typeUtils.asElement(superclassDeclaredType);
+
+                    // 父类字段
+                    List<? extends Element> superclassFields = superclassTypeElement.getEnclosedElements();
+
+                    setClassField(superclassFields, classInfo);
                 }
             }
+
             write(classInfo,processingEnv);
         }
         return true;
     }
 
+    private void setClassField(List<? extends Element> enclosedElements, ClassInfo classInfo) {
+        // 类成员变量
+        for (Element field : enclosedElements) {
+            GenQueryVOField annotation = field.getAnnotation(GenQueryVOField.class);
+            // 添加了GenQueryVOField注解的类
+            if (annotation != null && !annotation.ignore() && field.getKind() == ElementKind.FIELD) {
+                // 字段名
+                TypeMirror type = field.asType();
+                // 字段类型
+                Element type_ = processingEnv.getTypeUtils().asElement(type);
+                if (type_ != null) {
+                    type = type_.asType();
+                }
+                // 字段描述
+                String describe = annotation.describe();
 
+                if (annotation.between()) {
+                    // 起始字段
+                    classInfo.addFields(new FieldInfo(field.getSimpleName().toString() + "Begin", type.toString(), describe + "开始"));
+                    classInfo.addFields(new FieldInfo(field.getSimpleName().toString() + "End", type.toString(), describe + "结束"));
+                    if (!annotation.ignoreSelf()) {
+                        classInfo.addFields(new FieldInfo(field.getSimpleName().toString(), type.toString(), describe));
+                    }
+                } else {
+                    classInfo.addFields(new FieldInfo(field.getSimpleName().toString(), type.toString(), describe));
+                }
+
+            }
+        }
+    }
 
 
     @Override
