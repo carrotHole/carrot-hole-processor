@@ -23,10 +23,10 @@ import static java.util.Locale.ENGLISH;
 public interface ProcessorService<T> {
 
 
-    default void setAppendField(AppendField[] append, ClassInfo classInfo, TypeElement typeElement, ProcessingEnvironment processingEnv) {
+    default void setAppendField(AppendField[] append, ClassInfo classInfo, ProcessingEnvironment processingEnv) {
         for (AppendField appendField : append) {
             if (!appendField.ignore()) {
-                classInfo.addFields(new FieldInfo(appendField.name(), appendField.typeName(), appendField.describe()));
+                classInfo.addFields(new FieldInfo(appendField.name(), appendField.typeName(), appendField.describe(), appendField.type()));
             }
         }
 

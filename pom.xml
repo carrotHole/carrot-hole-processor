@@ -6,7 +6,7 @@
 
     <groupId>io.github.carrothole</groupId>
     <artifactId>carrot-hole-processor</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <packaging>pom</packaging>
     <description>注解过程父类</description>
     <url>https://github.com/carrotHole/carrot-hole-processor.git</url>

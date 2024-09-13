@@ -1,5 +1,7 @@
 package io.github.carrothole.processor.generateo.entity;
 
+import io.github.carrothole.processor.generateo.enums.VOTypeEnum;
+
 /**
  * Description: 类成员变量 <br>
  * Date: 2024/9/4 13:43 <br>
@@ -17,14 +19,19 @@ public class FieldInfo {
 
     private String describe;
 
+    private VOTypeEnum[] types;
+
+    private boolean hasQuery = false;
+    private boolean hasResult = false;
 
     public FieldInfo() {
     }
 
-    public FieldInfo(String name, String type, String describe) {
+    public FieldInfo(String name, String type, String describe, VOTypeEnum[] types) {
         this.name = name;
         setType(type);
         this.describe = describe;
+        setTypes(types);
     }
 
     public String getName() {
@@ -55,6 +62,28 @@ public class FieldInfo {
 
     public void setDescribe(String describe) {
         this.describe = describe;
+    }
+
+    public VOTypeEnum[] getTypes() {
+        return types;
+    }
+
+    public boolean isHasQuery() {
+        return hasQuery;
+    }
+
+    public boolean isHasResult() {
+        return hasResult;
+    }
+
+    public void setTypes(VOTypeEnum[] types) {
+        this.types = types;
+        for (VOTypeEnum voTypeEnum : types) {
+            switch (voTypeEnum){
+                case QUERY -> this.hasQuery = true;
+                case RESULT -> this.hasResult = true;
+            }
+        }
     }
 
     @Override

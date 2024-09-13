@@ -1,5 +1,7 @@
 package io.github.carrothole.processor.generateo.anno;
 
+import io.github.carrothole.processor.generateo.enums.VOTypeEnum;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -35,4 +37,10 @@ public @interface AppendField {
     String describe();
 
     boolean ignore() default false;
+
+    /**
+     * 类型
+     */
+    VOTypeEnum[] type() default {VOTypeEnum.QUERY, VOTypeEnum.RESULT};
+
 }
