@@ -19,13 +19,8 @@ public class FieldInfo {
 
     private String describe;
 
-    private VOTypeEnum[] types;
+    private int[] types;
 
-    private boolean hasQuery = false;
-    private boolean hasResult = false;
-
-    public FieldInfo() {
-    }
 
     public FieldInfo(String name, String type, String describe, VOTypeEnum[] types) {
         this.name = name;
@@ -64,25 +59,14 @@ public class FieldInfo {
         this.describe = describe;
     }
 
-    public VOTypeEnum[] getTypes() {
-        return types;
-    }
-
-    public boolean isHasQuery() {
-        return hasQuery;
-    }
-
-    public boolean isHasResult() {
-        return hasResult;
+    public boolean hasThis(VOTypeEnum type){
+        return types[type.ordinal()] == 1;
     }
 
     public void setTypes(VOTypeEnum[] types) {
-        this.types = types;
+        this.types = new int[VOTypeEnum.values().length];
         for (VOTypeEnum voTypeEnum : types) {
-            switch (voTypeEnum){
-                case QUERY -> this.hasQuery = true;
-                case RESULT -> this.hasResult = true;
-            }
+            this.types[voTypeEnum.ordinal()] = 1;
         }
     }
 

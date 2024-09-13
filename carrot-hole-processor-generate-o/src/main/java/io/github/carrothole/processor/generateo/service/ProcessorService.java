@@ -3,13 +3,18 @@ package io.github.carrothole.processor.generateo.service;
 import io.github.carrothole.processor.generateo.anno.AppendField;
 import io.github.carrothole.processor.generateo.entity.ClassInfo;
 import io.github.carrothole.processor.generateo.entity.FieldInfo;
+import io.github.carrothole.processor.generateo.enums.VOTypeEnum;
 
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.Element;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import static java.util.Locale.ENGLISH;
 
@@ -23,67 +28,4 @@ import static java.util.Locale.ENGLISH;
 public interface ProcessorService<T> {
 
 
-    default void setAppendField(AppendField[] append, ClassInfo classInfo, ProcessingEnvironment processingEnv) {
-        for (AppendField appendField : append) {
-            if (!appendField.ignore()) {
-                classInfo.addFields(new FieldInfo(appendField.name(), appendField.typeName(), appendField.describe(), appendField.type()));
-            }
-        }
-
-
-    }
-
-    default void write(ClassInfo classInfo, ProcessingEnvironment processingEnv) {
-        try {
-            // 创建.java文件
-            JavaFileObject fileObject = processingEnv.getFiler().createSourceFile(classInfo.getPackageName()+"."+classInfo.getName());
-
-            try (PrintWriter writer = new PrintWriter(fileObject.openWriter())) {
-                writer.println("package " + classInfo.getPackageName() + ";");
-                writer.println("");
-                writer.println("import io.swagger.v3.oas.annotations.media.Schema;");
-                writer.println("import java.io.Serializable;");
-
-                // 导包
-                for (String anImport : classInfo.getImports()) {
-                    writer.println("import "+anImport+";");
-                }
-
-                writer.println("");
-
-                // 类名
-                writer.println("@Schema(description = \"" + classInfo.getDescription() + "\")");
-                writer.println("public class " + classInfo.getName() + " implements Serializable {");
-
-                // 生成构造器
-                writer.println("    public " + classInfo.getName() + "() {}");
-
-                // 成员变量
-                for (FieldInfo field : classInfo.getFields()) {
-                    writer.println("    @Schema(description = \"" + field.getDescribe() + "\")");
-                    writer.println("    private " + field.getSimpleType() + " " + field.getName() + ";");
-                    writer.println(" ");
-                }
-
-                // getter/setter
-                for (FieldInfo field : classInfo.getFields()) {
-                    writer.println("    public " + field.getSimpleType() + " get" + capitalize(field.getName()) + "() { return this." + field.getName() + "; }");
-                    writer.println("    public void set" + capitalize(field.getName()) + "(" + field.getSimpleType() + " " + field.getName() + ") { this." + field.getName() + " = " + field.getName() + "; }");
-                    writer.println(" ");
-                }
-
-                writer.println("}");
-            }
-        } catch (IOException e) {
-            processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Failed to create source file "+ classInfo.toString());
-            processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, e.getMessage());
-        }
-    }
-
-    static String capitalize(String name) {
-        if (name == null || name.isEmpty()) {
-            return name;
-        }
-        return name.substring(0, 1).toUpperCase(ENGLISH) + name.substring(1);
-    }
 }

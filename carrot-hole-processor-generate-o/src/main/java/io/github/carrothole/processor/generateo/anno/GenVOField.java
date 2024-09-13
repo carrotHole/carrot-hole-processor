@@ -38,7 +38,7 @@ public @interface GenVOField {
     /**
      * 生成类型
      */
-    VOTypeEnum[] type() default {};
+    VOTypeEnum[] type() default {VOTypeEnum.QUERY, VOTypeEnum.RESULT};
 
     /**
      * 是否使用起始值两个字段<br/>
