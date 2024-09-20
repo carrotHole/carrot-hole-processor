@@ -95,6 +95,11 @@ public class ClassInfo {
             if (!field.getType().startsWith("java.lang")){
                 imports.add(field.getType());
             }
+            String[] annotations = field.getAnnotations();
+            for (int i = 0; i < annotations.length; i++) {
+                String annotation = annotations[i];
+                imports.add(annotation.replace("@", "").split("\\(")[0]);
+            }
         }
     }
 
@@ -102,15 +107,5 @@ public class ClassInfo {
         this.imports.addAll(Arrays.asList(imports));
     }
 
-    @Override
-    public String toString() {
-        return "ClassInfo{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", packageName='" + packageName + '\'' +
-                ", writePath='" + writePath + '\'' +
-                ", imports=" + imports +
-                ", fields=" + fields +
-                '}';
-    }
+
 }

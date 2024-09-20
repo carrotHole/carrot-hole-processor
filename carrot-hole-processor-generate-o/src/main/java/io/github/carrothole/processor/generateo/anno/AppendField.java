@@ -36,6 +36,12 @@ public @interface AppendField {
      */
     String describe();
 
+    /**
+     * 注解<br/>
+     * 如: com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+     */
+    String[] annotations() default {};
+
     boolean ignore() default false;
 
     /**

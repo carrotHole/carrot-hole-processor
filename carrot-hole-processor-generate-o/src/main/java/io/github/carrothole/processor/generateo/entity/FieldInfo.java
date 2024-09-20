@@ -21,12 +21,18 @@ public class FieldInfo {
 
     private int[] types;
 
+    private String[] simpleAnnotations;
 
-    public FieldInfo(String name, String type, String describe, VOTypeEnum[] types) {
+    private String[] annotations;
+
+
+
+    public FieldInfo(String name, String type, String describe, VOTypeEnum[] types, String[] annotations) {
         this.name = name;
         setType(type);
         this.describe = describe;
         setTypes(types);
+        setAnnotations(annotations);
     }
 
     public String getName() {
@@ -45,6 +51,26 @@ public class FieldInfo {
         this.type = type;
         String[] split = type.split("\\.");
         this.simpleType = split[split.length-1];
+    }
+
+
+    public String[] getSimpleAnnotations() {
+        return simpleAnnotations;
+    }
+    public String[] getAnnotations() {
+        return annotations;
+    }
+
+    public void setAnnotations(String[] annotations) {
+
+        String[] annoName = new String[annotations.length];
+        for (int i = 0; i < annotations.length; i++) {
+            String annotation = annotations[i];
+            String[] split = annotation.split("\\.");
+            annoName[i] = split[split.length-1];
+        }
+        this.annotations = annotations;
+        this.simpleAnnotations = annoName;
     }
 
     public String getSimpleType() {

@@ -46,4 +46,5 @@ public @interface GenVOField {
      */
     boolean between() default false;
 
+    String[] annotations() default {};
 }

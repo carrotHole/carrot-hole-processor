@@ -4,7 +4,6 @@ import io.github.carrothole.processor.generateo.anno.*;
 import io.github.carrothole.processor.generateo.entity.ClassInfo;
 import io.github.carrothole.processor.generateo.entity.FieldInfo;
 import io.github.carrothole.processor.generateo.enums.VOTypeEnum;
-import io.github.carrothole.processor.generateo.service.ProcessorService;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -91,7 +90,7 @@ public class GenVOProcess extends AbstractProcessor {
     public void setAppendField(AppendField[] append, ClassInfo classInfo, ProcessingEnvironment processingEnv) {
         for (AppendField appendField : append) {
             if (!appendField.ignore()) {
-                classInfo.addFields(new FieldInfo(appendField.name(), appendField.typeName(), appendField.describe(), appendField.type()));
+                classInfo.addFields(new FieldInfo(appendField.name(), appendField.typeName(), appendField.describe(), appendField.type(), appendField.annotations()));
             }
         }
 
@@ -130,7 +129,13 @@ public class GenVOProcess extends AbstractProcessor {
             // 成员变量
             for (FieldInfo field : classInfo.getFields()) {
                 if (field.hasThis(type)){
+                    // 自定义注解
+                    for (String simpleAnnotation : field.getSimpleAnnotations()) {
+                        builder.append("    @").append(simpleAnnotation).append(NEWLINE);
+                    }
+                    // swagger注解
                     builder.append("    @Schema(description = \"").append(field.getDescribe()).append("\"").append(")").append(NEWLINE);
+                    // 字段
                     builder.append("    private ").append(field.getSimpleType()).append(" ").append(field.getName()).append(SEPARATOR).append(NEWLINE);
                     builder.append(NEWLINE);
                 }
@@ -178,13 +183,13 @@ public class GenVOProcess extends AbstractProcessor {
 
                 if (annotation.between()) {
                     // 起始字段
-                    classInfo.addFields(new FieldInfo(field.getSimpleName().toString() + "Begin", type.toString(), describe + "开始",annotation.type()));
-                    classInfo.addFields(new FieldInfo(field.getSimpleName().toString() + "End", type.toString(), describe + "结束",annotation.type()));
+                    classInfo.addFields(new FieldInfo(field.getSimpleName().toString() + "Begin", type.toString(), describe + "开始",annotation.type(), new String[0]));
+                    classInfo.addFields(new FieldInfo(field.getSimpleName().toString() + "End", type.toString(), describe + "结束",annotation.type(), new String[0]));
                     if (!annotation.ignoreSelf()) {
-                        classInfo.addFields(new FieldInfo(field.getSimpleName().toString(), type.toString(), describe,annotation.type()));
+                        classInfo.addFields(new FieldInfo(field.getSimpleName().toString(), type.toString(), describe,annotation.type(), annotation.annotations()));
                     }
                 } else {
-                    classInfo.addFields(new FieldInfo(field.getSimpleName().toString(), type.toString(), describe,annotation.type()));
+                    classInfo.addFields(new FieldInfo(field.getSimpleName().toString(), type.toString(), describe,annotation.type(), annotation.annotations()));
                 }
 
             }
